@@ -30,7 +30,10 @@ pipeline {
         }
           stage('User Acceptance') {
             steps{
-                input(message: "Proceed to push to main?", ok: "Push to main", reject: "Do not push") 
+                script {
+                    // Utilisation de la fonction input pour demander une confirmation de l'utilisateur
+                    input(message: "Proceed to push to main?", ok: "Push to main") 
+                }          
             }
           }
           stage('Pushing and Merging'){
