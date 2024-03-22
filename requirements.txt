@@ -1,2 +1,1 @@
-flask
-unittestflask==3.0.2
+flask==3.0.2
