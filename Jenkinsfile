@@ -16,7 +16,7 @@ pipeline {
                 sh 'python3 -m unittest'
           }
         }
-          stage('Deploying') {
+        stage('Deploying') {
           steps{
             script {
               sh '''
@@ -27,24 +27,23 @@ pipeline {
             }
           }
         }
-          stage('User Acceptance') {
-            steps{
-                input(message: "Proceed to push to main?", ok: "Push to main")
+        stage('User Acceptance') {
+          steps{
+            input(message: "Proceed to push to main?", ok: "Push to main")
+          }
+        }
+        stage('Vérification des informations d\'identification') {
+          steps {
+            script {
+              def credentials = credentials('docker_jenkins')
+              echo "Nom d'utilisateur : ${credentials?.username}"
+              echo "Mot de passe : ${credentials?.password}"
             }
           }
-        stage('Vérification des informations d\'identification') {
-            steps {
-                script {
-                    def credentials = credentials('docker_jenkins')
-                    echo "Nom d'utilisateur : ${credentials?.username}"
-                    echo "Mot de passe : ${credentials?.password}"
-                }
-            }
-            stage('Merging') {
-              steps {
-                echo 'Merging done'
-              }
-            }
+        }
+        stage('Merging') {
+          steps {
+            echo 'Merging done'
           }
         }
     }
