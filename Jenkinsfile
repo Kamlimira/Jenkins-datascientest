@@ -40,9 +40,6 @@ pipeline {
                     echo "Mot de passe : ${credentials?.password}"
                 }
             }
-        }
-
-
             stage('Merging') {
               steps {
                 echo 'Merging done'
