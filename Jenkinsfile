@@ -32,14 +32,16 @@ pipeline {
                 input(message: "Proceed to push to main?", ok: "Push to main")
             }
           }
-            stage('Pushing and Merging') {
-                steps {
-                    withCredentials([usernamePassword(credentialsId: 'DOCKER_HUB_PASS', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW')]) {
-                        sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
-                        sh "docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG"
-                    }
+        stage('Vérification des informations d\'identification') {
+            steps {
+                script {
+                    def credentials = credentials('docker_jenkins')
+                    echo "Nom d'utilisateur : ${credentials?.username}"
+                    echo "Mot de passe : ${credentials?.password}"
                 }
             }
+        }
+
 
             stage('Merging') {
               steps {
