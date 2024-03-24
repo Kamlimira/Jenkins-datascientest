@@ -35,7 +35,7 @@ pipeline {
         stage('Vérification des informations d\'identification') {
           steps {
             script {
-              def credentials = credentials('docker_jenkins')
+              def credentials = credentials('DOCKER_HUB_PASS')
               echo "Nom d'utilisateur : ${credentials?.username}"
               echo "Mot de passe : ${credentials?.password}"
             }
