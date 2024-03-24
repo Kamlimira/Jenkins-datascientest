@@ -12,7 +12,7 @@ pipeline {
         stage('Testing') {
 
         }
-          stage('Deploying') {
+        stage('Deploying') {
 
         }
     }
