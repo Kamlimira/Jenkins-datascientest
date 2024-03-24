@@ -32,17 +32,15 @@ pipeline {
                 input(message: "Proceed to push to main?", ok: "Push to main")
             }
           }
-          stage('Pushing and Merging'){
-            parallel {
-                stage('Pushing Image') {
-                  environment {
-                      DOCKERHUB_CREDENTIALS = credentials('docker_jenkins')
-                  }
-                  steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                      sh 'docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG'
-                  }
+            stage('Pushing and Merging') {
+                steps {
+                    withCredentials([usernamePassword(credentialsId: 'DOCKER_HUB_PASS', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW')]) {
+                        sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                        sh "docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG"
+                    }
                 }
+            }
+
             stage('Merging') {
               steps {
                 echo 'Merging done'
