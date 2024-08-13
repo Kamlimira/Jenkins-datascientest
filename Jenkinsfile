@@ -1,6 +1,7 @@
 pipeline {
 environment { // Declaration of environment variables
 DOCKER_ID = "mira797" // replace this with your docker-id
+DOCKER_PASS = credentials("DOCKER_HUB_TOKEN")  // Le token d'accès personnel stocké dans Jenkins
 DOCKER_IMAGE = "datascientestapi"
 DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
 }
