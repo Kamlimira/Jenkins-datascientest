@@ -1,13 +1,12 @@
 pipeline {
 environment { // Declaration of environment variables
 DOCKER_ID = "mira797" // replace this with your docker-id
-DOCKER_PASS = credentials("DOCKER_HUB_TOKEN")  // Le token d'accès personnel stocké dans Jenkins
 DOCKER_IMAGE = "datascientestapi"
-DOCKER_TAG = "v.${BUILD_ID}.0" 
+DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
 }
 agent any // Jenkins will be able to select all available agents
 stages {
-        stage(' Docker Build'){ // docker build image stage
+        stage('Docker Build'){ // docker build image stage
             steps {
                 script {
                 sh '''
@@ -18,7 +17,7 @@ stages {
                 }
             }
         }
-        stage('Docker run'){ // run container from our builded image
+        stage(' Docker run'){ // run container from our built image
                 steps {
                     script {
                     sh '''
@@ -42,7 +41,7 @@ stages {
         stage('Docker Push'){ //we pass the built image to our docker hub account
             environment
             {
-                DOCKER_PASS = credentials("DOCKER_HUB_TOKEN") // we retrieve  docker password from secret text called docker_hub_pass saved on jenkins
+                DOCKER_PASS = credentials("DOCKER_HUB_PASS") // we retrieve docker password from secret text called docker_hub_pass saved on jenkins
             }
 
             steps {
@@ -57,10 +56,10 @@ stages {
 
         }
 
-stage('Deploiement en dev'){
+stage('Deployment in dev'){
         environment
         {
-        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        KUBECONFIG = credentials("config") // we retrieve kubeconfig from secret file called config saved on jenkins
         }
             steps {
                 script {
@@ -81,7 +80,7 @@ stage('Deploiement en dev'){
 stage('Deploiement en staging'){
         environment
         {
-        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        KUBECONFIG = credentials("config") // we retrieve kubeconfig from secret file called config saved on jenkins
         }
             steps {
                 script {
@@ -102,7 +101,7 @@ stage('Deploiement en staging'){
   stage('Deploiement en prod'){
         environment
         {
-        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        KUBECONFIG = credentials("config") // we retrieve kubeconfig from secret file called config saved on jenkins
         }
             steps {
             // Create an Approval Button with a timeout of 15minutes.
